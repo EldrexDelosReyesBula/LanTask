@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LanTask - LanDecs</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <link rel="stylesheet" href="https://eldrex.vercel.app/lantask/task.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <div class="headline-small logo-text">LanTask</div>
+                </div>
+                <button class="button-outlined button" id="sidebar-toggle">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+            </div>
+
+            <div class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="tasks">
+                    <span class="material-symbols-outlined">task_alt</span>
+                    <span class="nav-text">All Tasks</span>
+                </a>
+                <a href="#" class="nav-item" data-page="today">
+                    <span class="material-symbols-outlined">today</span>
+                    <span class="nav-text">Today</span>
+                </a>
+                <a href="#" class="nav-item" data-page="scheduled">
+                    <span class="material-symbols-outlined">schedule</span>
+                    <span class="nav-text">Scheduled</span>
+                </a>
+                <a href="#" class="nav-item" data-page="important">
+                    <span class="material-symbols-outlined">label_important</span>
+                    <span class="nav-text">Important</span>
+                </a>
+                <a href="#" class="nav-item" data-page="completed">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    <span class="nav-text">Completed</span>
+                </a>
+                <a href="#" class="nav-item" data-page="analytics">
+                    <span class="material-symbols-outlined">analytics</span>
+                    <span class="nav-text">Analytics</span>
+                </a>
+                <a href="#" class="nav-item" data-page="focus">
+                    <span class="material-symbols-outlined">timer</span>
+                    <span class="nav-text">Focus Mode</span>
+                </a>
+            </div>
+
+            <div style="flex: 1;"></div>
+
+            <div class="sidebar-nav">
+                <a href="#" class="nav-item" data-page="settings">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span class="nav-text">Settings</span>
+                </a>
+                <a href="#" class="nav-item" data-page="help">
+                    <span class="material-symbols-outlined">help</span>
+                    <span class="nav-text">Help & Feedback</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content" id="main-content">
+            <div class="top-app-bar">
+                <button style="margin: 15px;"class="button-outlined button" id="menu-button">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+
+                <div class="headline-small" id="page-title">Dashboard</div>
+
+                <div class="top-app-bar-actions">
+                    <button class="button-outlined button" id="search-button">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div class="page active" id="dashboard">
+                    <div class="card spring-slide-up">
+                        <div class="card-header">
+                            <div class="title-large greeting-editable" id="greeting-text">Welcome to LanTask Pro!</div>
+                        </div>
+                        <p class="body-medium" id="dashboard-summary">Loading your tasks...</p>
+
+                        <div class="quick-action-buttons">
+                            <button class="quick-action-button" id="quick-timer">
+                                <span class="material-symbols-outlined">timer</span>
+                                Quick Timer
+                            </button>
+                            <button class="quick-action-button" id="quick-task">
+                                <span class="material-symbols-outlined">add</span>
+                                Quick Task
+                            </button>
+                            <button class="quick-action-button" id="quick-break">
+                                <span class="material-symbols-outlined">coffee</span>
+                                Take Break
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="button-filled button stats-modal-button" id="stats-modal-button">
+                        <span class="material-symbols-outlined" style="margin-right: var(--space-xs);">analytics</span>
+                        View Stats
+                    </button>
+
+                    <div class="stats-grid">
+                        <div class="stat-card spring-slide-up" style="animation-delay: 0.1s;">
+                            <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--dynamic-primary);">task_alt</div>
+                            <div class="stat-value" id="total-tasks-count">0</div>
+                            <div class="stat-label">Total Tasks</div>
+                        </div>
+                        <div class="stat-card spring-slide-up" style="animation-delay: 0.2s;">
+                            <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--md-success);">check_circle</div>
+                            <div class="stat-value" id="completed-tasks-count">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-card spring-slide-up" style="animation-delay: 0.3s;">
+                            <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--md-warning);">schedule</div>
+                            <div class="stat-value" id="pending-tasks-count">0</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-card spring-slide-up" style="animation-delay: 0.4s;">
+                            <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--md-error);">priority_high</div>
+                            <div class="stat-value" id="overdue-tasks-count">0</div>
+                            <div class="stat-label">Overdue</div>
+                        </div>
+                    </div>
+
+                    <div class="card spring-slide-up" id="active-timer-card" style="animation-delay: 0.5s; display: none;">
+                        <div class="card-header">
+                            <div class="title-large">Active Timer</div>
+                            <button class="button-text button" id="go-to-focus">
+                                Go to Focus Mode
+                                <span class="material-symbols-outlined">chevron_right</span>
+                            </button>
+                        </div>
+                        <div class="timer-display" id="dashboard-timer-display">25:00</div>
+                        <div class="timer-progress">
+                            <div class="timer-progress-bar" id="dashboard-timer-progress"></div>
+                        </div>
+                    </div>
+
+                    <div class="card spring-slide-up" style="animation-delay: 0.6s;">
+                        <div class="card-header">
+                            <div class="title-large">Recent Tasks</div>
+                            <button class="button-text button" id="view-all-tasks">
+                                View All
+                                <span class="material-symbols-outlined">chevron_right</span>
+                            </button>
+                        </div>
+                        <div id="recent-tasks-list">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page" id="tasks">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title-large">All Tasks</div>
+                            <div class="flex" style="gap: var(--space-sm);">
+                                <button class="button-outlined button" id="tasks-filter">
+                                    <span class="material-symbols-outlined">filter_list</span>
+                                    Filter
+                                </button>
+                                <button class="button-outlined button" id="tasks-sort">
+                                    <span class="material-symbols-outlined">sort</span>
+                                    Sort
+                                </button>
+                            </div>
+                        </div>
+                        <div id="all-tasks-list">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page" id="today">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title-large">Today's Tasks</div>
+                            <div class="chip" id="today-tasks-count">0 tasks</div>
+                        </div>
+                        <div id="today-tasks-list">
+                            <!-- Today's tasks will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page" id="settings">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title-large">Settings</div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="settings-section-title">
+                                <span class="material-symbols-outlined">palette</span>
+                                Appearance
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Theme</div>
+                                    <div class="settings-option-description">Choose your preferred theme</div>
+                                </div>
+                                <button class="button-outlined button" id="theme-selector-button">
+                                    Change Theme
+                                </button>
+                            </div>
+
+                           <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Dark Mode</div>
+                                    <div class="settings-option-description">Switch between light and dark themes</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="dark-mode-toggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Font Size</div>
+                                    <div class="settings-option-description">Adjust the text size</div>
+                                </div>
+                                <select class="select-field" id="font-size-select" style="width: 120px;">
+                                    <option value="small">Small</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="large">Large</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="settings-section-title">
+                                <span class="material-symbols-outlined">notifications</span>
+                                Notifications
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Task Reminders</div>
+                                    <div class="settings-option-description">Get notified about upcoming tasks</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="task-reminders-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Daily Digest</div>
+                                    <div class="settings-option-description">Receive a daily summary of your tasks</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="daily-digest-toggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="settings-section-title">
+                                <span class="material-symbols-outlined">psychology</span>
+                                Smart Features
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Auto-Categorization</div>
+                                    <div class="settings-option-description">Automatically categorize your tasks</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="auto-categorization-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Smart Suggestions</div>
+                                    <div class="settings-option-description">Get intelligent task suggestions</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="smart-suggestions-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Priority Prediction</div>
+                                    <div class="settings-option-description">AI-powered priority assignment</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="priority-prediction-toggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Content Filtering</div>
+                                    <div class="settings-option-description">Blur sensitive content</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="content-filtering-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="settings-section-title">
+                                <span class="material-symbols-outlined">sort</span>
+                                Sorting & Filtering
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Default Sort</div>
+                                    <div class="settings-option-description">Default task sorting method</div>
+                                </div>
+                                <select class="select-field" id="default-sort" style="width: 150px;">
+                                    <option value="dueDate">Due Date</option>
+                                    <option value="priority">Priority</option>
+                                    <option value="created" selected>Created Date</option>
+                                    <option value="title">Title</option>
+                                </select>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Group By</div>
+                                    <div class="settings-option-description">Group tasks by category</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="group-by-category-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="settings-section import-export-section">
+                            <div class="settings-section-title">
+                                <span class="material-symbols-outlined">import_export</span>
+                                Import & Export
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Export Tasks</div>
+                                    <div class="settings-option-description">Download your tasks as JSON file</div>
+                                </div>
+                                <button class="button-outlined button" id="export-tasks">
+                                    Export
+                                </button>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Import Tasks</div>
+                                    <div class="settings-option-description">Import tasks from JSON file</div>
+                                </div>
+                                <div class="file-input-container">
+                                    <input type="file" class="file-input" id="import-tasks" accept=".json">
+                                    <label for="import-tasks" class="file-input-label">
+                                        <span class="material-symbols-outlined">upload</span>
+                                        Choose File
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Clear Completed Tasks</div>
+                                    <div class="settings-option-description">Remove all completed tasks</div>
+                                </div>
+                                <button class="button-outlined button" id="clear-completed-tasks" style="color: var(--md-error);">
+                                    Clear
+                                </button>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Clear All Data</div>
+                                    <div class="settings-option-description">Reset the application</div>
+                                </div>
+                                <button class="button-outlined button" id="clear-all-data" style="color: var(--md-error);">
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page" id="scheduled">
+                    <div class="empty-state">
+                        <div class="empty-state-icon material-symbols-outlined">schedule</div>
+                        <div class="empty-state-title">No Scheduled Tasks</div>
+                        <div class="empty-state-description">You don't have any tasks scheduled for future dates. Add a due date to your tasks to see them here.</div>
+                        <button class="button-filled button" id="add-scheduled-task">
+                            <span class="material-symbols-outlined">add</span>
+                            Add Task
+                        </button>
+                    </div>
+                </div>
+
+                <div class="page" id="important">
+                    <div class="empty-state">
+                        <div class="empty-state-icon material-symbols-outlined">label_important</div>
+                        <div class="empty-state-title">No Important Tasks</div>
+                        <div class="empty-state-description">Mark tasks as important to see them here. Important tasks are highlighted across the app.</div>
+                        <button class="button-filled button" id="add-important-task">
+                            <span class="material-symbols-outlined">add</span>
+                            Add Task
+                        </button>
+                    </div>
+                </div>
+
+                <div class="page" id="completed">
+                    <div class="empty-state">
+                        <div class="empty-state-icon material-symbols-outlined">check_circle</div>
+                        <div class="empty-state-title">No Completed Tasks</div>
+                        <div class="empty-state-description">Completed tasks will appear here. Check off tasks to move them to this section.</div>
+                    </div>
+                </div>
+
+                <div class="page" id="analytics">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title-large">Productivity Analytics</div>
+                            <select class="select-field" id="analytics-period" style="width: 150px;">
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                        <div class="w-100" style="height: 300px;">
+                            <canvas id="analytics-chart"></canvas>
+                        </div>
+                        <div class="analytics-insights" id="analytics-insights">
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--dynamic-primary);">trending_up</div>
+                            <div class="stat-value" id="completion-rate">0%</div>
+                            <div class="stat-label">Completion Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--md-success);">speed</div>
+                            <div class="stat-value" id="tasks-per-week">0</div>
+                            <div class="stat-label">Tasks/Week</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--md-info);">avg_time</div>
+                            <div class="stat-value" id="avg-time-per-task">0h</div>
+                            <div class="stat-label">Avg. Time/Task</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--md-warning);">calendar_clock</div>
+                            <div class="stat-value" id="on-time-rate">0%</div>
+                            <div class="stat-label">On Time Rate</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page" id="focus">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="title-large">Focus Mode</div>
+                            <div class="chip">Deep Work</div>
+                        </div>
+                        <div class="timer-card" style="margin: 0;">
+                            <div class="timer-display" style="font-size: 4rem;" id="focus-timer-display">45:00</div>
+                            <div class="timer-controls">
+                                <button class="button-filled button" id="start-focus-timer" style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
+                                    <span class="material-symbols-outlined" style="margin-right: var(--space-xs);">play_arrow</span>
+                                    Start Focus
+                                </button>
+                                <button class="button-outlined button" id="fullscreen-timer-button" style="color: white; border-color: rgba(255,255,255,0.5);">
+                                    <span class="material-symbols-outlined" style="margin-right: var(--space-xs);">fullscreen</span>
+                                    Fullscreen
+                                </button>
+                            </div>
+                            <div class="timer-progress">
+                                <div class="timer-progress-bar" id="focus-timer-progress" style="width: 0%;"></div>
+                            </div>
+                        </div>
+
+                        <div style="padding: var(--space-lg);">
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Focus Duration</div>
+                                    <div class="settings-option-description">Set how long you want to focus</div>
+                                </div>
+                                <select class="select-field" id="focus-duration" style="width: 120px;">
+                                    <option value="25">25 minutes</option>
+                                    <option value="45" selected>45 minutes</option>
+                                    <option value="60">60 minutes</option>
+                                    <option value="90">90 minutes</option>
+                                </select>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Break Duration</div>
+                                    <div class="settings-option-description">Set how long your breaks will be</div>
+                                </div>
+                                <select class="select-field" id="break-duration" style="width: 120px;">
+                                    <option value="5">5 minutes</option>
+                                    <option value="10" selected>10 minutes</option>
+                                    <option value="15">15 minutes</option>
+                                    <option value="20">20 minutes</option>
+                                </select>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Block Distractions</div>
+                                    <div class="settings-option-description">Temporarily block distracting websites</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="block-distractions-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Focus Music</div>
+                                    <div class="settings-option-description">Play ambient music during focus sessions</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="focus-music-toggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Motivational Quotes</div>
+                                    <div class="settings-option-description">Show motivational quotes during focus sessions</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="motivational-quotes-toggle" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page" id="help">
+
+    <div class="card">
+        <div class="card-header">
+            <div class="title-large">Help & Feedback</div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem; text-align: center; color: #666;">
+            <span class="material-symbols-outlined" style="font-size: 3rem; margin-bottom: 1rem; color: red;">
+                error
+            </span>
+            <div style="font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem;">
+                This page isn't available right now
+            </div>
+        </div>
+    </div>
+</div>
+                    <!--<div class="card">
+                        <div class="card-header">
+                            <div class="title-large">Help & Feedback</div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="settings-section-title">
+                                <span class="material-symbols-outlined">help</span>
+                                Help Center
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">User Guide</div>
+                                    <div class="settings-option-description">Learn how to use LanTask Pro effectively</div>
+                                </div>
+                                <button class="button-outlined button">
+                                    <span class="material-symbols-outlined">open_in_new</span>
+                                    Open
+                                </button>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">FAQs</div>
+                                    <div class="settings-option-description">Frequently asked questions</div>
+                                </div>
+                                <button class="button-outlined button">
+                                    <span class="material-symbols-outlined">open_in_new</span>
+                                    Open
+                                </button>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Video Tutorials</div>
+                                    <div class="settings-option-description">Watch step-by-step tutorials</div>
+                                </div>
+                                <button class="button-outlined button">
+                                    <span class="material-symbols-outlined">play_circle</span>
+                                    Watch
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="settings-section">
+                            <div class="settings-section-title">
+                                <span class="material-symbols-outlined">feedback</span>
+                                Feedback
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Report a Bug</div>
+                                    <div class="settings-option-description">Found an issue? Let us know</div>
+                                </div>
+                                <button class="button-outlined button">
+                                    <span class="material-symbols-outlined">bug_report</span>
+                                    Report
+                                </button>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Feature Request</div>
+                                    <div class="settings-option-description">Suggest a new feature</div>
+                                </div>
+                                <button class="button-outlined button">
+                                    <span class="material-symbols-outlined">lightbulb</span>
+                                    Suggest
+                                </button>
+                            </div>
+
+                            <div class="settings-option">
+                                <div class="settings-option-label">
+                                    <div class="settings-option-title">Contact Support</div>
+                                    <div class="settings-option-description">Get help from our support team</div>
+                                </div>
+                                <button class="button-outlined button">
+                                    <span class="material-symbols-outlined">support_agent</span>
+                                    Contact
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+        </div>
+
+        <!-- Enhanced FAB -->
+        <div class="fab-container">
+            <div class="fab" id="add-task-fab">
+                <span class="material-symbols-outlined">add</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Page -->
+    <div class="search-page" id="search-page">
+        <div class="search-header">
+            <button class="button-outlined button" id="back-button">
+                <span class="material-symbols-outlined">arrow_back</span>
+            </button>
+            <div class="search-input-container">
+                <span class="material-symbols-outlined search-icon">search</span>
+                <input type="text" class="search-input" id="search-input" placeholder="Search tasks, start timers, or quick actions...">
+            </div>
+        </div>
+        <div class="search-results">
+            <div class="search-section">
+                <div class="search-section-title">Search Results</div>
+                <div id="search-results-list">
+                    <!-- Search results will be dynamically added here -->
+                </div>
+            </div>
+            <div class="search-section">
+                <div class="search-section-title">Smart Suggestions</div>
+                <div class="suggestion-carousel" id="suggestion-carousel">
+                    <!-- Suggestions will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Modal for Mobile -->
+    <div class="stats-modal" id="stats-modal">
+        <div class="stats-modal-content">
+            <div class="card-header">
+                <div class="title-large">Your Stats</div>
+                <button class="modal-close" id="close-stats-modal">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="stats-modal-grid">
+                <div class="stats-modal-stat">
+                    <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--dynamic-primary);">task_alt</div>
+                    <div class="stat-value" id="modal-total-tasks">0</div>
+                    <div class="stat-label">Total Tasks</div>
+                </div>
+                <div class="stats-modal-stat">
+                    <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--md-success);">check_circle</div>
+                    <div class="stat-value" id="modal-completed-tasks">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stats-modal-stat">
+                    <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--md-warning);">schedule</div>
+                    <div class="stat-value" id="modal-pending-tasks">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+                <div class="stats-modal-stat">
+                    <div class="material-symbols-outlined" style="font-size: 2rem; color: var(--md-error);">priority_high</div>
+                    <div class="stat-value" id="modal-overdue-tasks">0</div>
+                    <div class="stat-label">Overdue</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Timer -->
+    <div class="fullscreen-timer" id="fullscreen-timer">
+        <div class="fullscreen-timer-display" id="fullscreen-timer-display">45:00</div>
+        <div class="fullscreen-timer-controls">
+            <button class="button-filled button" id="pause-fullscreen-timer" style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
+                <span class="material-symbols-outlined" style="margin-right: var(--space-xs);">pause</span>
+                Pause
+            </button>
+            <button class="button-outlined button" id="stop-fullscreen-timer" style="color: white; border-color: rgba(255,255,255,0.5);">
+                <span class="material-symbols-outlined" style="margin-right: var(--space-xs);">stop</span>
+                Stop
+            </button>
+        </div>
+
+        <div class="focus-music-container" id="focus-music-container" style="display: none;">
+            <div class="title-medium" style="color: white; margin-bottom: var(--space-md);">Focus Music</div>
+            <div class="music-controls">
+                <button class="button-outlined button" id="prev-track" style="color: white; border-color: rgba(255,255,255,0.5);">
+                    <span class="material-symbols-outlined">skip_previous</span>
+                </button>
+                <button class="button-filled button" id="play-music" style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px);">
+                    <span class="material-symbols-outlined">play_arrow</span>
+                </button>
+                <button class="button-outlined button" id="next-track" style="color: white; border-color: rgba(255,255,255,0.5);">
+                    <span class="material-symbols-outlined">skip_next</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="motivational-quote" id="motivational-quote">
+            "The secret of getting ahead is getting started." - Mark Twain
+        </div>
+    </div>
+
+    <!-- Break Mode -->
+    <div class="break-mode" id="break-mode">
+        <div class="break-header">
+            <button class="button-outlined button" id="back-from-break">
+                <span class="material-symbols-outlined" style="color: white;">arrow_back</span>
+            </button>
+            <div class="headline-small" >Take a Break</div>
+            <button style="color: white;"class="button-outlined button" id="breath-button">
+                <span class="material-symbols-outlined" style="color: white;">air</span>
+                Breathe
+            </button>
+        </div>
+
+        <div class="break-content">
+
+            <div class="break-timer" id="break-timer">05:00</div>
+            <div class="break-quote" id="break-quote">
+                "Sometimes the most productive thing you can do is relax."
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="confirmation-modal" id="confirmation-modal">
+        <div class="confirmation-content">
+            <div class="title-large" id="confirmation-title">Confirm Action</div>
+            <div class="body-medium" id="confirmation-message">Are you sure you want to proceed?</div>
+            <div class="confirmation-timer" id="confirmation-timer">5</div>
+            <div class="confirmation-buttons">
+                <button class="button-outlined button" id="confirmation-cancel">Cancel</button>
+                <button class="button-filled button" id="confirmation-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Add Task Modal -->
+    <div class="modal-backdrop" id="add-task-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="title-large">Add New Task</div>
+                <button class="modal-close" id="close-modal">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="task-title">Task Title</label>
+                <input type="text" class="text-field" id="task-title" placeholder="What needs to be done?">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="task-description">Description (Optional)</label>
+                <textarea class="text-field text-area" id="task-description" placeholder="Add details about your task..."></textarea>
+            </div>
+
+            <div class="flex-between" style="gap: var(--space-md); margin-bottom: var(--space-lg);">
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label" for="task-priority">Priority</label>
+                    <select class="select-field" id="task-priority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="flex: 1;">
+                    <label class="form-label" for="task-category">Category</label>
+                    <select class="select-field" id="task-category">
+                        <option value="personal">Personal</option>
+                        <option value="work">Work</option>
+                        <option value="health">Health</option>
+                        <option value="learning">Learning</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="task-due-date">Due Date (Optional)</label>
+                <input type="text" class="text-field" id="task-due-date" placeholder="e.g., tomorrow, next Monday, 2024-12-31">
+                <div class="form-hint">You can type natural language dates</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="task-time-estimate">Time Estimate (Optional)</label>
+                <input type="text" class="text-field" id="task-time-estimate" placeholder="e.g., 30m, 2h">
+            </div>
+
+            <div class="suggestions-container" id="suggestions-container">
+                <!-- Suggestions will appear here -->
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--space-md); margin-top: var(--space-xl);">
+                <button class="button-outlined button" id="cancel-task">Cancel</button>
+                <button class="button-filled button" id="save-task">Save Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Selector Modal -->
+    <div class="modal-backdrop" id="theme-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="title-large">Choose Theme</div>
+                <button class="modal-close" id="close-theme-modal">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <div class="theme-grid">
+                <div class="theme-option active" data-theme="default">
+                    <div class="theme-preview" style="--theme-color: #007AFF; --theme-color-secondary: #0056CC;"></div>
+                    <div class="theme-name">Sierra Blue</div>
+                </div>
+                <div class="theme-option" data-theme="graphite">
+                    <div class="theme-preview" style="--theme-color: #8E8E93; --theme-color-secondary: #6D6D70;"></div>
+                    <div class="theme-name">Graphite</div>
+                </div>
+                <div class="theme-option" data-theme="gold">
+                    <div class="theme-preview" style="--theme-color: #FFD700; --theme-color-secondary: #D4AF37;"></div>
+                    <div class="theme-name">Gold</div>
+                </div>
+                <div class="theme-option" data-theme="silver">
+                    <div class="theme-preview" style="--theme-color: #C0C0C0; --theme-color-secondary: #A8A8A8;"></div>
+                    <div class="theme-name">Silver</div>
+                </div>
+                <div class="theme-option" data-theme="space-black">
+                    <div class="theme-preview" style="--theme-color: #1C1C1E; --theme-color-secondary: #2C2C2E;"></div>
+                    <div class="theme-name">Space Black</div>
+                </div>
+                <div class="theme-option" data-theme="alpine-green">
+                    <div class="theme-preview" style="--theme-color: #597D5A; --theme-color-secondary: #4A6C4B;"></div>
+                    <div class="theme-name">Alpine Green</div>
+                </div>
+                <div class="theme-option" data-theme="deep-purple">
+                    <div class="theme-preview" style="--theme-color: #5856D6; --theme-color-secondary: #4745C4;"></div>
+                    <div class="theme-name">Deep Purple</div>
+                </div>
+                <div class="theme-option" data-theme="product-red">
+                    <div class="theme-preview" style="--theme-color: #FF3B30; --theme-color-secondary: #D70015;"></div>
+                    <div class="theme-name">Product Red</div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: var(--space-xl);">
+                <button class="button-filled button" id="apply-theme">Apply Theme</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://eldrex.vercel.app/lantask/task.js"></script>
+</body>
+
+</html>
