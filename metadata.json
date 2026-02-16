@@ -1,0 +1,5 @@
+{
+  "name": "LanTask V1",
+  "description": "A modern, offline-first productivity application built with React and Tailwind CSS, featuring task management, focus mode, and analytics.",
+  "requestFramePermissions": []
+}
